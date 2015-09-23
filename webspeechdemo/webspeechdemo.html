@@ -193,6 +193,9 @@ function getWord(word){
         msg.text = val;
         msg.lang = 'th-TH';
         speechSynthesis.speak(msg);
+        msg.onend = function(e) {
+          recognition.start();
+        };
     });
   });
 }
@@ -258,6 +261,8 @@ if (!('webkitSpeechRecognition' in window)) {
     for (var i = event.resultIndex; i < event.results.length; ++i) {
       if (event.results[i].isFinal) {
         final_transcript += event.results[i][0].transcript;
+        recognition.onend = null;
+        recognition.stop();
         addLogChatting(final_transcript)
         getWord(final_transcript)
       } else {
